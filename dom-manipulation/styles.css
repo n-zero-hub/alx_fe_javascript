@@ -39,7 +39,7 @@ button {
     padding: 0.5rem 1rem;
     border: 1px solid rgb(0, 0, 0, 0.4);
     border-radius: 8px;
-    background-color: rgba(222, 55, 4, 0.5);
+    background-color: rgba(154, 72, 47, 0.5);
 }
 button:hover {
     background-color: rgba(241, 67, 3, 0.7);

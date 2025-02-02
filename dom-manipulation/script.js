@@ -125,8 +125,34 @@ const attachAddQuoteListener = () => {
 };
 
 loadQuotesFromLocalStorage();
-
+attachAddQuoteListener();
 showRandomQuote();
+
+// Export quotes to JSON file
+const exportQuotesToJson = () => {
+    const quotesBlob = new Blob([JSON.stringify(quotes, null, 2)], { type: "application/json" });
+    const downloadLink = document.createElement("a");
+    downloadLink.href = URL.createObjectURL(quotesBlob);
+    downloadLink.download = "quotes.json";
+    downloadLink.click();
+  };
+
+  // Add event listener for exporting quotes
+  document.getElementById("exportQuotes").addEventListener("click", exportQuotesToJson);
+
+  // Import quotes from a JSON file
+  function importFromJsonFile(event) {
+    const fileReader = new FileReader();
+    fileReader.onload = function(event) {
+      const importedQuotes = JSON.parse(event.target.result);
+      quotes.push(...importedQuotes);
+      saveQuotesToLocalStorage();
+      alert('Quotes imported successfully!');
+      showRandomQuote();
+    };
+    fileReader.readAsText(event.target.files[0]);
+  }
+
 });
 
 

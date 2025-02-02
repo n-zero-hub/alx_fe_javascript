@@ -15,6 +15,11 @@
       <button id="newQuote">Show New Quote</button>
     </section>
     <section id="addquote" class="addquote"></section>
+    <section class="addquote">
+      <button id="exportQuotes">Export Quotes to JSON</button>
+    <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+    </section>
+    
   </main>
   <script src="script.js"></script>
 </body>
