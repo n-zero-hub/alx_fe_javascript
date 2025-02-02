@@ -1,7 +1,7 @@
 
 document.addEventListener('DOMContentLoaded', function ()  {
 
-    const quotes = [
+    let quotes = [
         {
             text: "The only way to do great work is to love what you do.",
             category: "Inspiration"
@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function ()  {
 
     const quoteDisplay = document.getElementById("quoteDisplay");
     const showNewQuote = document.getElementById("newQuote");
+
 // show Random Quote
     const showRandomQuote = () => {
         const randomIndex = Math.floor(Math.random() * quotes.length);
@@ -32,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function ()  {
     showNewQuote.addEventListener('click', () => {
         showRandomQuote();
     });
+
 //creating and adding new Quotes
     const  createAddQuoteForm = () => {
         const addQuoteContainer = document.getElementById("addquote");
@@ -76,7 +78,15 @@ const addQuote = () => {
     };
     quotes.push(newQuote);
     
+    saveQuotesToLocalStorage();
+
     showRandomQuote();
+
+};
+
+// saving quotes to a local storage
+const saveQuotesToLocalStorage = () => {
+    localStorage.setItem("quotes", JSON.stringify(quotes)); 
 };
 
 document.getElementById("addQuote").addEventListener("click", () => {
@@ -89,6 +99,35 @@ document.getElementById("addQuote").addEventListener("click", () => {
     showRandomQuote();
 })
  
+// Loading quotes from Local Storage
+
+const loadQuotesFromLocalStorage = () => {
+    const savedQuotes = localStorage.getItem("quotes"); 
+    if (savedQuotes) {
+        quotes = JSON.parse(savedQuotes); 
+    }
+};
+
+// Attach the event listener to the addQuote button after the form has been created
+const attachAddQuoteListener = () => {
+    const addQuoteButton = document.getElementById("addQuote");
+    if (addQuoteButton) {
+        addQuoteButton.addEventListener("click", () => {
+            addQuote();
+            alert("The quote has been added.");
+
+            document.getElementById("newQuoteText").value = "";
+            document.getElementById("newQuoteCategory").value = "";
+
+            showRandomQuote();
+        });
+    }
+};
+
+loadQuotesFromLocalStorage();
+
 showRandomQuote();
 });
+
+
 
