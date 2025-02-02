@@ -53,8 +53,10 @@ document.addEventListener('DOMContentLoaded', function ()  {
         addQuoteButton.id = "addQuote"
         addQuoteButton.textContent = "Add Quote";
 
-
-        addQuoteContainer.append(inputText, inputCategory, addQuoteButton);
+        addQuoteContainer.appendChild(inputText);
+        addQuoteContainer.appendChild(inputCategory);
+        addQuoteContainer.appendChild(addQuoteButton);
+        
     };
 createAddQuoteForm();
 
