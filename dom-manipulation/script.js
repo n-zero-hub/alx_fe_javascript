@@ -224,6 +224,109 @@ document.getElementById("categoryFilter").addEventListener("change", filterQuote
 // Initialize categories and filtering on page load
 populateCategories();
 
+//Fetching Quotes from the Server (Simulated)
+
+const API_URL = "https://jsonplaceholder.typicode.com/posts"; // Simulated API for fetching quotes
+
+//////////////////////////////////////////////////////////////---------/////////
+
+// Fetch quotes from server (simulated)
+const fetchQuotesFromServer = async () => {
+    try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        
+        // Simulating categories (random assignment for this demo)
+        const fetchedQuotes = data.slice(0, 10).map((post, index) => ({
+            text: post.title,
+            category: index % 2 === 0 ? "Inspiration" : "Motivation",
+        }));
+
+        // Sync local quotes with server data
+        syncQuotesWithServer(fetchedQuotes);
+    } catch (error) {
+        console.error("Error fetching quotes:", error);
+    }
+}
+
+//-------------------------------------------------------------------//
+
+//Posting New Quotes to the Server
+
+const postQuoteToServer = async (newQuote) => {
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            body: JSON.stringify(newQuote),
+            headers: { "Content-Type": "application/json" }
+        });
+        const result = await response.json();
+        console.log("Quote saved on server:", result);
+    } catch (error) {
+        console.error("Error posting quote:", error);
+    }
+};
+
+ // ------------------------------------------------------------//
+
+//Implement Data Syncing
+
+let localQuotes = [];  // Simulated local quotes
+
+const syncQuotesWithServer = (fetchedQuotes) => {
+    // Simulate checking if the local data is out of sync with the server
+    const serverQuoteIds = fetchedQuotes.map(q => q.text);  // Using 'text' as unique ID
+
+    // Merge new server data if discrepancies exist
+    const mergedQuotes = [...fetchedQuotes, ...localQuotes.filter(local => !serverQuoteIds.includes(local.text))];
+    
+    // Sync local storage and update UI
+    localQuotes = mergedQuotes;
+    localStorage.setItem("quotes", JSON.stringify(localQuotes));
+    displayQuotes();  // Function to display quotes on the UI
+};
+
+// ----------------------------//
+
+//Handling Conflicts
+ 
+let conflictResolved = false;
+
+const notifyConflict = () => {
+    const conflictAlert = document.createElement("div");
+    conflictAlert.textContent = "Data conflict detected. The server's data has been prioritized.";
+    conflictAlert.classList.add("alert", "alert-warning");
+    document.body.appendChild(conflictAlert);
+
+    // Offer the user an option to resolve conflicts manually
+    const resolveButton = document.createElement("button");
+    resolveButton.textContent = "Resolve Conflict";
+    resolveButton.addEventListener("click", () => {
+        resolveConflict();
+    });
+    document.body.appendChild(resolveButton);
+};
+
+const resolveConflict = () => {
+    // Manually resolve conflict (e.g., allowing the user to choose between server or local data)
+    conflictResolved = true;
+    localStorage.setItem("quotes", JSON.stringify(localQuotes));
+    alert("Conflict resolved and local data synced.");
+};
+
+//------------------------------------------//
+
+//Periodic Data Fetching and UI Updates
+
+const startAutoSync = () => {
+    setInterval(() => {
+        console.log("Fetching new quotes...");
+        fetchQuotesFromServer();  // Fetch new data from server
+    }, 30000); // Fetch new quotes every 30 seconds
+};
+
+startAutoSync();
+
 
 
 });
